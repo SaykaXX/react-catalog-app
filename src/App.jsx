@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// Данные о товарах (data)
 const initialProducts = [
   { id: 1, name: 'Ноутбук', price: 80000, discount: 0 },
   { id: 2, name: 'Смартфон', price: 40000, discount: 0 },
@@ -8,20 +7,17 @@ const initialProducts = [
 ];
 
 export default function App() {
-  // Состояния для управления отображением
-  const [currentView, setCurrentView] = useState('Catalog'); // Окно: Catalog, ProductCard, DiscountButton
+  const [currentView, setCurrentView] = useState('Catalog');
   const [products, setProducts] = useState(initialProducts);
   const [selectedProduct, setSelectedProduct] = useState(initialProducts[0]);
 
-  // Функция для применения скидки (discount) в 10% на все товары
   const applyDiscount = () => {
     const updatedProducts = products.map(product => ({
       ...product,
-      discount: 10 // Устанавливаем скидку 10%
+      discount: 10
     }));
     setProducts(updatedProducts);
     
-    // Обновляем также выбранный товар, чтобы изменения применились в карточке
     const currentSelected = updatedProducts.find(p => p.id === selectedProduct.id);
     setSelectedProduct(currentSelected);
     
@@ -31,7 +27,6 @@ export default function App() {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '600px' }}>
       
-      {/* Навигационная панель с КНОПКАМИ из желтого квадрата */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <button 
           onClick={() => setCurrentView('Catalog')}
@@ -55,10 +50,8 @@ export default function App() {
 
       <hr />
 
-      {/* Отрисовка контента в зависимости от активной кнопки */}
       <div style={{ marginTop: '20px' }}>
         
-        {/* 1. Экран CATALOG (Использует метод MAP) */}
         {currentView === 'Catalog' && (
           <div>
             <h2>Каталог товаров</h2>
@@ -68,11 +61,10 @@ export default function App() {
                   key={product.id} 
                   onClick={() => {
                     setSelectedProduct(product);
-                    setCurrentView('ProductCard'); // При клике переходим на карточку товара
+                    setCurrentView('ProductCard');
                   }}
                   style={{ border: '1px solid #ccc', padding: '10px', cursor: 'pointer', borderRadius: '4px' }}
                 >
-                  {/* Использование свойств NAME и PRICE из синего квадрата */}
                   <strong>{product.name}</strong> — {product.price} руб.
                   {product.discount > 0 && <span style={{ color: 'green' }}> (Скидка {product.discount}%)</span>}
                 </div>
@@ -81,7 +73,6 @@ export default function App() {
           </div>
         )}
 
-        {/* 2. Экран PRODUCT CARD (Компонент карточки с пропсами) */}
         {currentView === 'ProductCard' && (
           <ProductCard 
             name={selectedProduct.name} 
@@ -90,7 +81,6 @@ export default function App() {
           />
         )}
 
-        {/* 3. Экран DISCOUNT BUTTON (Кнопка применения скидки) */}
         {currentView === 'DiscountButton' && (
           <div>
             <h2>Управление скидками</h2>
@@ -109,9 +99,7 @@ export default function App() {
   );
 }
 
-// Отдельный компонент для карточки товара, принимающий пропсы {...props}
 function ProductCard({ name, price, discount }) {
-  // Вычисление финальной цены с учетом скидки
   const finalPrice = discount > 0 ? price * (1 - discount / 100) : price;
 
   return (
